@@ -1,11 +1,13 @@
 import express from "express";
 import "dotenv/config";
 import mongoose from "mongoose";
+import cors from "cors";
 import { VideoGame } from "./models/videoGameModel.js";
 
 // Express app
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // GET all video games
 app.get("/videogames", async (req, res) => {
@@ -43,10 +45,8 @@ app.post("/videogames", async (req, res) => {
     await VideoGame.create(newVideoGame);
     res.status(200).json(newVideoGame);
   } catch (error) {
-    console.error(error); // Log the error for debugging
-    res
-      .status(500)
-      .json({ error: "An error occurred while creating the video game." }); // Send a generic error message to the client
+    console.error(error);
+    res.status(400).json({ error: error.message });
   }
 });
 
